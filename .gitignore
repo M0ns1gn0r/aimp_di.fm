@@ -1,4 +1,4 @@
-# compiled source #
+﻿# compiled source #
 ###################
 *.com
 *.class
@@ -9,8 +9,9 @@
 *.cache
 *.suo
 
-# Include dlls if they’re in the NuGet packages directory
-!/packages/*/lib/*.dll
+#NuGet
+packages
+!packages/repositories.config
 
 # VS Upgrade stuff #
 ####################
