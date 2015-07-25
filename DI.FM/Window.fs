@@ -5,9 +5,9 @@ open System.Windows
 open Hardcodet.Wpf.TaskbarNotification
 
 let createTaskBarIcon () = 
-    let tbi = new TaskbarIcon();
-    tbi.Icon <- Drawing.SystemIcons.Hand;
-    tbi.ToolTipText <- "This is the DI.FM notification.";
+    let tbi = new TaskbarIcon()        
+    tbi.IconSource <- new Media.Imaging.BitmapImage(new Uri("pack://application:,,,/DI.FM;component/logo.ico"))
+    tbi.ToolTipText <- "This is the DI.FM notification."
     tbi
 
 (*let win = new Window()
