@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DI.FM", "DI.FM\DI.FM.fsproj", "{34D6C0BC-1503-408A-96CC-E7CFD7C84DA8}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DI.FM.WPF", "DI.FM.WPF\DI.FM.WPF.fsproj", "{20B8C770-571E-4B98-9CAA-B04E16618B77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -14,6 +16,10 @@ Global
 		{34D6C0BC-1503-408A-96CC-E7CFD7C84DA8}.Debug|x86.ActiveCfg = Debug|x86
 		{34D6C0BC-1503-408A-96CC-E7CFD7C84DA8}.Debug|x86.Build.0 = Debug|x86
 		{34D6C0BC-1503-408A-96CC-E7CFD7C84DA8}.Release|x86.ActiveCfg = Release|Any CPU
+		{20B8C770-571E-4B98-9CAA-B04E16618B77}.Debug|x86.ActiveCfg = Debug|x86
+		{20B8C770-571E-4B98-9CAA-B04E16618B77}.Debug|x86.Build.0 = Debug|x86
+		{20B8C770-571E-4B98-9CAA-B04E16618B77}.Release|x86.ActiveCfg = Release|x86
+		{20B8C770-571E-4B98-9CAA-B04E16618B77}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

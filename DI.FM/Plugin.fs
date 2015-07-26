@@ -23,6 +23,7 @@ type Plugin() =
         // TODO: register hotkeys.
                 
         let menuItemPlusHandler _ =
+            (new DI.FM.WPF.MainView()).Root.Show()
             // TODO: use AIMP_MSG_CMD_SHOW_NOTIFICATION to show the result of vote?
             this.AimpCore.SendMessage(AimpMessages.AimpCoreMessageType.AIMP_MSG_CMD_SHOW_NOTIFICATION, 0, "Hello world!")
         menuItemPlus.Click.Add menuItemPlusHandler
