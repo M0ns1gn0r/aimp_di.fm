@@ -49,9 +49,11 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Resource Include="Icons\logo.ico" />
     <Resource Include="MainWindow.xaml" />
     <Compile Include="MainWindow.xaml.fs" />
     <None Include="packages.config" />
+    <Compile Include="Window.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
@@ -65,6 +67,10 @@
     </Reference>
     <Reference Include="FsXaml.Wpf.TypeProvider">
       <HintPath>..\packages\FsXaml.Wpf.0.9.9\lib\net45\FsXaml.Wpf.TypeProvider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification">
+      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.5\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />

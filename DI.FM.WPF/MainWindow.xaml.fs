@@ -6,7 +6,7 @@ open FSharp.ViewModule
 open FSharp.ViewModule.Validation
 open FsXaml
 
-type MainView = XAML<"MainWindow.xaml", true>
+type MainWindow = XAML<"MainWindow.xaml", true>
 
 type MainViewModel() = 
     inherit ViewModelBase()
