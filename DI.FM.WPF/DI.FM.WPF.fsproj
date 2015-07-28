@@ -50,10 +50,9 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Resource Include="Icons\logo.ico" />
-    <Resource Include="MainWindow.xaml" />
-    <Compile Include="MainWindow.xaml.fs" />
     <None Include="packages.config" />
     <Compile Include="Window.fs" />
+    <Resource Include="TaskBarIcon.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />

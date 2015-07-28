@@ -1,13 +1,14 @@
 ﻿module DI.FM.WPF.Window
+open Hardcodet.Wpf.TaskbarNotification
 
-let show () = 
-    // This line simply forces .NET to load the reference. Othewise the XAML parser won't
-    // find the TaskBar, and won't even try to load the corresponding assembly.
-    let unused = Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None
+type TaskBarIconResource = FsXaml.XAML<"TaskBarIcon.xaml">
 
-    let window = (new MainWindow()).Root
-    window.Show()
-
-    // Return a window disposal delegate.
-    let dispose = window.Close
-    dispose
+let mutable _icon = Option<TaskbarIcon>.None
+let show () =
+    let resourceDictionary = new TaskBarIconResource()
+    let icon = resourceDictionary.Root.Item "TheNotifyIcon"
+    _icon <- match icon :?> TaskbarIcon with
+                | null -> None
+                | i -> Some(i)
+let hide () =
+    _icon |> Option.iter (fun i -> i.Dispose())
