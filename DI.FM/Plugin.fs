@@ -1,4 +1,4 @@
-﻿namespace DI.FM
+﻿module DI.FM
 
 open AIMP.SDK
 open AIMP.SDK360
@@ -6,36 +6,40 @@ open AIMP.SDK.Services.MenuManager
 open AIMP.SDK.UI.MenuItem
 open DI.FM.WPF
 
+/// Makes the UI culture invariant so that exceptions are not getting localized.
+let initUICulture () =
+    System.Threading.Thread.CurrentThread.CurrentUICulture <-
+        System.Globalization.CultureInfo.InvariantCulture
+
 [<AimpPlugin("DI.FM", "Roman Nikitin", "1")>]
 type Plugin() = 
     inherit AimpPlugin()
      
     let menuType = ParentMenuType.AIMP_MENUID_PLAYER_TRAY
-    let menuItemPlus = new StandartMenuItem("DI.FM vote +");
-    let menuItemMinus = new StandartMenuItem("DI.FM vote -");
+    let menuItemPlus = new StandartMenuItem("DI.FM vote up");
+    let menuItemMinus = new StandartMenuItem("DI.FM vote down");
 
     override this.HasSettingDialog = false
     override this.ShowSettingDialog(wnd) = ()
 
-    override this.Initialize() =        
+    override this.Initialize() =
+        initUICulture()
+        Interop.resetFPU ()
+        UI.start()
+
         // TODO: register hotkeys.
-                
-        let menuItemPlusHandler _ =
-            DI.FM.WPF.Window.show()
-            
-            // TODO: use AIMP_MSG_CMD_SHOW_NOTIFICATION to show the result of vote?
-            this.AimpCore.SendMessage(AimpMessages.AimpCoreMessageType.AIMP_MSG_CMD_SHOW_NOTIFICATION, 0, "Hello world!")
-        menuItemPlus.Click.Add menuItemPlusHandler
 
-        let menuItemMinusHandler _ =
-            DI.FM.WPF.Window.hide()
-        menuItemMinus.Click.Add menuItemMinusHandler
+        let trackChangedHandler _ =
+            let fi = this.Player.CurrentFileInfo
+            let streamUrl = fi.FileName
+            (fi.Artist, fi.Title, streamUrl)
+            |> sprintf "Track changed: %A"
+            |> System.Diagnostics.Debug.WriteLine
 
-        // Register menu items.
-        this.Player.MenuManager.Add(menuType, menuItemMinus)
-        this.Player.MenuManager.Add(menuType, menuItemPlus)
+        this.Player.TrackChanged.Add trackChangedHandler
 
     override this.Dispose() =
+        UI.stop()
 
         this.Player.MenuManager.Delete(menuItemMinus)
         this.Player.MenuManager.Delete(menuItemPlus)

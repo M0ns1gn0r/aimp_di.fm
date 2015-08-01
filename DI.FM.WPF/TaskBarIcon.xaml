@@ -6,6 +6,21 @@
     <tb:TaskbarIcon
         x:Key="TheNotifyIcon"
         IconSource="pack://application:,,,/DI.FM.WPF;component/Icons/logo.ico"
-        ToolTipText="This is the DI.FM notification." />
+        ToolTipText="This is the DI.FM notification.">
+        <tb:TaskbarIcon.TrayPopup>
+            <Border
+              Background="White"
+              BorderBrush="Orange"
+              BorderThickness="2"
+              CornerRadius="4"
+              Width="160"
+              Height="40">
+                <Button
+                    Content="Click Me!"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            </Border>
+        </tb:TaskbarIcon.TrayPopup>
+    </tb:TaskbarIcon>
 
 </ResourceDictionary>

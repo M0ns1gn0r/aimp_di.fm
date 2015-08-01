@@ -51,7 +51,7 @@
   <ItemGroup>
     <Resource Include="Icons\logo.ico" />
     <None Include="packages.config" />
-    <Compile Include="Window.fs" />
+    <Compile Include="UI.fs" />
     <Resource Include="TaskBarIcon.xaml" />
   </ItemGroup>
   <ItemGroup>

@@ -78,6 +78,7 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Compile Include="Interop.fs" />
     <Compile Include="Plugin.fs" />
   </ItemGroup>
   <ItemGroup>
