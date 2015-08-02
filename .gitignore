@@ -1,4 +1,7 @@
-﻿# compiled source #
+﻿# VS 2015 folder #
+.vs
+
+# compiled source #
 ###################
 *.com
 *.class
