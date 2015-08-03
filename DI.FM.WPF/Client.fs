@@ -9,6 +9,7 @@ type Config = {
     stations: Map<string, int>;
 }
 
+let userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36"
 let diFmConfigUrl = "http://www.di.fm/webplayer3/config"
 let diFmTrackHistoryUrl channelId = 
     sprintf "http://www.di.fm/_papi/v1/di/track_history/channel/%d?per_page=10" channelId
@@ -72,14 +73,12 @@ let processDiFmUrl = function
     | _ -> System.Console.WriteLine "Not a DI.FM url."
 
 /// Retrieves the apiKey and builds "channel name" to "channel id" map.
-let getDiFmConfig cookie =
+let getDiFmConfig sessionId =
     let response = 
         Http.RequestString(
             diFmConfigUrl,
-            headers = [ 
-                HttpRequestHeaders.Accept HttpContentTypes.Json;
-                "Cookie", cookie
-            ])
+            headers = [ HttpRequestHeaders.UserAgent userAgent ],
+            cookies = [ "audio_addict_session", sessionId ])
         |> DiFmConfig.Parse
     let config = response.Api.Config
     {
@@ -105,7 +104,8 @@ let vote apiKey channelId trackId direction =
         url,
         httpMethod = "POST",
         headers = [ 
-            HttpRequestHeaders.Accept HttpContentTypes.Json;
+            HttpRequestHeaders.Accept HttpContentTypes.Json
+            HttpRequestHeaders.UserAgent userAgent
             "X-Api-Key", apiKey
         ])
     |> DiFmVoteResponse.Parse
