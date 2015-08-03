@@ -10,6 +10,9 @@ type Config = {
 }
 
 let userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36"
+let diFmCookiesDomain = new System.Uri "http://www.di.fm/"
+let diFmSessionCookieName = "audio_addict_session"
+let diFmLoginUrl = "http://www.di.fm/login"
 let diFmConfigUrl = "http://www.di.fm/webplayer3/config"
 let diFmTrackHistoryUrl channelId = 
     sprintf "http://www.di.fm/_papi/v1/di/track_history/channel/%d?per_page=10" channelId
@@ -72,13 +75,31 @@ let processDiFmUrl = function
         |>  System.Console.WriteLine
     | _ -> System.Console.WriteLine "Not a DI.FM url."
 
+/// Attempts to login into DI.FM and retrieve the session cookie.
+let loginToDiFm login password =
+    let cc = System.Net.CookieContainer()
+    let response = 
+        Http.RequestString(
+            diFmLoginUrl,
+            httpMethod = "POST",
+            headers = [ HttpRequestHeaders.UserAgent userAgent ],
+            cookieContainer = cc,
+            body = FormValues [
+                "member_session[username]", login
+                "member_session[password]", password
+                "member_session[remember_me]", "1"
+            ])
+    let cookies = cc.GetCookies diFmCookiesDomain
+    if cookies = null then failwith "No cookies found."
+    cookies.[diFmSessionCookieName]
+
 /// Retrieves the apiKey and builds "channel name" to "channel id" map.
 let getDiFmConfig sessionId =
     let response = 
         Http.RequestString(
             diFmConfigUrl,
             headers = [ HttpRequestHeaders.UserAgent userAgent ],
-            cookies = [ "audio_addict_session", sessionId ])
+            cookies = [ diFmSessionCookieName, sessionId ])
         |> DiFmConfig.Parse
     let config = response.Api.Config
     {
