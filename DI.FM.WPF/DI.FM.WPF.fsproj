@@ -49,11 +49,13 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Resource Include="Icons\logo.ico" />
+    <Resource Include="Icons\enabled.ico" />
+    <Resource Include="Icons\disabled.ico" />
     <None Include="packages.config" />
     <Compile Include="Client.fs" />
     <Compile Include="UI.fs" />
     <Resource Include="TaskBarIcon.xaml" />
+    <Compile Include="TaskBarIcon.xaml.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
