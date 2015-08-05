@@ -45,20 +45,21 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <Tailcalls>false</Tailcalls>
-    <OutputPath>D:\Portable software\AIMP3\Plugins\aimp_dotnet\DI.FM\</OutputPath>
+    <OutputPath>D:\Portable software\AIMP3_ForDebug\Plugins\aimp_dotnet\DI.FM\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile />
     <StartAction>Program</StartAction>
-    <StartProgram>D:\Portable software\AIMP3\AIMP3.exe</StartProgram>
-    <StartWorkingDirectory>D:\Portable software\AIMP3\</StartWorkingDirectory>
+    <StartProgram>D:\Portable software\AIMP3_ForDebug\AIMP3.exe</StartProgram>
+    <StartWorkingDirectory>D:\Portable software\AIMP3_ForDebug\</StartWorkingDirectory>
     <PlatformTarget>x86</PlatformTarget>
+    <StartArguments>/debug</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <Tailcalls>true</Tailcalls>
-    <OutputPath>D:\Portable software\AIMP3\Plugins\aimp_dotnet\DI.FM\</OutputPath>
+    <OutputPath>D:\Portable software\AIMP3_ForDebug\Plugins\aimp_dotnet\DI.FM\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile />
