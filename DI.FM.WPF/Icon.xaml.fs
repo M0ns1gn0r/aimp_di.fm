@@ -18,7 +18,11 @@ type TaskBarIconViewModel() as x =
 type LoginViewModel() as x =
     inherit FSharp.ViewModule.ViewModelBase()
 
-    member x.Title = "This is a login page."
+    member x.Login
+        with get() = "Your login" and set(value: string) = ()
+
+    member x.Password
+        with get() = "" and set(value: string) = ()
 
 
 type NoTrackPlaysViewModel() as x =

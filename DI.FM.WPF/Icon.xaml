@@ -15,7 +15,7 @@
         </tb:TaskbarIcon.DataContext>
 
         <tb:TaskbarIcon.TrayPopup>
-            <V:TrayPopupView />
+            <V:TrayPopup />
         </tb:TaskbarIcon.TrayPopup>
 
     </tb:TaskbarIcon>
