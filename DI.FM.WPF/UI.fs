@@ -1,7 +1,7 @@
 ﻿module DI.FM.WPF.UI
 open Hardcodet.Wpf.TaskbarNotification
 
-type TaskBarIconResource = FsXaml.XAML<"TaskBarIcon.xaml">
+type TaskBarIconResource = FsXaml.XAML<"Icon.xaml">
 
 let mutable _icon = Option<TaskbarIcon>.None
 let start () =
