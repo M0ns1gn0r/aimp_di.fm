@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="aimp_dotnet">
-      <HintPath>..\..\..\..\..\Portable software\AIMP3\Plugins\aimp_dotnet\aimp_dotnet.dll</HintPath>
+      <HintPath>..\..\..\..\..\Portable software\AIMP3_ForDebug\Plugins\aimp_dotnet\aimp_dotnet.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib" />

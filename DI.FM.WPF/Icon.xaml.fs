@@ -1,5 +1,9 @@
 ﻿namespace DI.FM.WPF.ViewModels
 
+open DI.FM.Client
+open Chessie.ErrorHandling.Trial
+open FSharp.ViewModule.Validation
+
 type Icons = Enabled | Disabled | Error
 
 type TaskBarIconViewModel() as x =
@@ -7,7 +11,6 @@ type TaskBarIconViewModel() as x =
 
     let resourcePrefix = "pack://application:,,,/DI.FM.WPF;component"
     let iconSource = x.Factory.Backing(<@ x.IconSource @>, Disabled)
-
 
     member x.IconSource
         with get() = match iconSource.Value with
@@ -18,14 +21,48 @@ type TaskBarIconViewModel() as x =
 type LoginViewModel() as x =
     inherit FSharp.ViewModule.ViewModelBase()
 
-    member x.Login
-        with get() = "Your login" and set(value: string) = ()
+    let hasValue str = not(System.String.IsNullOrWhiteSpace(str))
 
+    let login = x.Factory.Backing(<@ x.Login @>, "Your login", notNullOrWhitespace)
+    let password = x.Factory.Backing(<@ x.Password @>, "", notNullOrWhitespace)
+
+    let doLogin () =
+        DI.FM.State.config <-
+            match loginToDiFm x.Login x.Password with
+            | Pass config | Warn (config, _) ->
+                // TODO: somehow navigate to another view.
+                Some config
+            | Fail errors -> 
+                let errorToString = function
+                | InvalidCredentials -> "Invalid credentials."
+                | NoCookiesFound -> "No cookies found."
+                | SessionCookieNotFound -> "Session cookie not found."
+                | LoginFailed ex -> sprintf "Login failed: %O" ex
+                | LoadConfigFailed ex -> sprintf "Config load failed: %O" ex
+                | TrackHistoryLookupFailed ex -> sprintf "Failed to retrieve track history: %O" ex
+                | VoteFailed ex -> sprintf "Failed to cast a vote: %O" ex
+
+                errors
+                |> Seq.map errorToString
+                |> String.concat ", "
+                |> System.Diagnostics.Debug.WriteLine
+                |> ignore
+                None
+        ()
+
+    member x.Login 
+        with get() = login.Value and set(value: string) = login.Value <- value
     member x.Password
-        with get() = "" and set(value: string) = ()
+        with get() = password.Value and set(value: string) = password.Value <- value
+    member x.LoginCommand = 
+        // TODO: use an asynchronous version.
+        x.Factory.CommandSyncChecked(
+            doLogin,
+            (fun _ -> hasValue x.Login && hasValue x.Password),
+            [ <@ x.Login @> ; <@ x.Password @> ])
 
 
-type NoTrackPlaysViewModel() as x =
+type NoTrackPlaysViewModel() =
     inherit FSharp.ViewModule.ViewModelBase()
 
     member x.Title = "No DI.FM tracks are playing at the moment."

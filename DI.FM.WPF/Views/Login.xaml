@@ -5,6 +5,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -17,6 +18,8 @@
 
         <TextBlock Margin="3" Grid.Row="1" Grid.Column="0" Text="Password:" />
         <TextBox Margin="3" Grid.Column="1" Grid.Row="1" FontSize="16" Text="{Binding Password}"/>
+
+        <Button Grid.Row="3" Grid.Column="1" Width="100" Command="{Binding LoginCommand}">Login</Button>
     </Grid>
 
 </UserControl>

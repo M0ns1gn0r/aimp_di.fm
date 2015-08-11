@@ -19,9 +19,9 @@
           BorderThickness="1"
           CornerRadius="4"
           Width="400"
-          Height="100">
+          Height="150">
         <ContentControl>
-            <VM:NoTrackPlaysViewModel />
+            <VM:LoginViewModel />
         </ContentControl>
     </Border>
         
