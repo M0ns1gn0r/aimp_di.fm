@@ -1,14 +1,14 @@
 ﻿module DI.FM.WPF.UI
 open Hardcodet.Wpf.TaskbarNotification
 
-type TaskBarIconResource = FsXaml.XAML<"Icon.xaml">
+type TaskBarIconResource = FsXaml.XAML<"TaskBarIcon.xaml">
 
-let mutable _icon = Option<TaskbarIcon>.None
+let mutable _taskbarIcon = Option<TaskbarIcon>.None
 let start () =
     let resourceDictionary = new TaskBarIconResource()
     let icon = resourceDictionary.Root.Item "TheNotifyIcon"
-    _icon <- match icon :?> TaskbarIcon with
-                | null -> None
-                | i -> Some(i)
+    _taskbarIcon <- match icon :?> TaskbarIcon with 
+                    | null -> None
+                    | i -> Some(i)
 let stop () =
-    _icon |> Option.iter (fun i -> i.Dispose())
+    _taskbarIcon |> Option.iter (fun i -> i.Dispose())

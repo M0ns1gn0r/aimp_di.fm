@@ -51,17 +51,19 @@
   <ItemGroup>
     <Resource Include="Icons\enabled.ico" />
     <Resource Include="Icons\disabled.ico" />
-    <Resource Include="Views\TrayPopup.xaml" />
-    <Resource Include="Views\Login.xaml" />
-    <Resource Include="Views\NoTrackPlays.xaml" />
-    <None Include="packages.config" />
     <Compile Include="Chessie.fs" />
     <Compile Include="Client.fs" />
     <Compile Include="State.fs" />
+    <Compile Include="ViewModels\LoginViewModel.fs" />
+    <Compile Include="ViewModels\NoTrackPlaysViewModel.fs" />
+    <Resource Include="Views\TrayPopup.xaml" />
+    <Resource Include="Views\Login.xaml" />
+    <Resource Include="Views\NoTrackPlays.xaml" />
+    <Compile Include="Views\Views.fs" />
+    <None Include="packages.config" />
+    <Resource Include="TaskBarIcon.xaml" />
+    <Compile Include="TaskBarIconViewModel.fs" />
     <Compile Include="UI.fs" />
-    <Compile Include="Views.fs" />
-    <Resource Include="Icon.xaml" />
-    <Compile Include="Icon.xaml.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />

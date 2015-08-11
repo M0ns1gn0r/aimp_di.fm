@@ -4,20 +4,6 @@ open DI.FM.Client
 open Chessie.ErrorHandling.Trial
 open FSharp.ViewModule.Validation
 
-type Icons = Enabled | Disabled | Error
-
-type TaskBarIconViewModel() as x =
-    inherit FSharp.ViewModule.ViewModelBase()
-
-    let resourcePrefix = "pack://application:,,,/DI.FM.WPF;component"
-    let iconSource = x.Factory.Backing(<@ x.IconSource @>, Disabled)
-
-    member x.IconSource
-        with get() = match iconSource.Value with
-                     | Enabled -> resourcePrefix + "/Icons/enabled.ico"
-                     | _ -> resourcePrefix + "/Icons/disabled.ico"
-
-
 type LoginViewModel() as x =
     inherit FSharp.ViewModule.ViewModelBase()
 
@@ -61,8 +47,3 @@ type LoginViewModel() as x =
             (fun _ -> hasValue x.Login && hasValue x.Password),
             [ <@ x.Login @> ; <@ x.Password @> ])
 
-
-type NoTrackPlaysViewModel() =
-    inherit FSharp.ViewModule.ViewModelBase()
-
-    member x.Title = "No DI.FM tracks are playing at the moment."
