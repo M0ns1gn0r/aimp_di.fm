@@ -20,9 +20,7 @@
           CornerRadius="4"
           Width="400"
           Height="150">
-        <ContentControl>
-            <VM:LoginViewModel />
-        </ContentControl>
+        <ContentControl Content="{Binding CurrentView}" />
     </Border>
         
 </UserControl>

@@ -3,6 +3,7 @@
 open DI.FM.Client
 open Chessie.ErrorHandling.Trial
 open FSharp.ViewModule.Validation
+open DI.FM.State
 
 type LoginViewModel() as x =
     inherit FSharp.ViewModule.ViewModelBase()
@@ -13,10 +14,14 @@ type LoginViewModel() as x =
     let password = x.Factory.Backing(<@ x.Password @>, "", notNullOrWhitespace)
 
     let doLogin () =
-        DI.FM.State.config <-
+        ()
+        raiseEvent Events.LoggedIn
+        
+        (*config <-
             match loginToDiFm x.Login x.Password with
             | Pass config | Warn (config, _) ->
-                // TODO: somehow navigate to another view.
+                // Navigate to another view.
+                raiseEvent Events.LoggedIn
                 Some config
             | Fail errors -> 
                 let errorToString = function
@@ -34,7 +39,7 @@ type LoginViewModel() as x =
                 |> System.Diagnostics.Debug.WriteLine
                 |> ignore
                 None
-        ()
+        ()*)
 
     member x.Login 
         with get() = login.Value and set(value: string) = login.Value <- value
