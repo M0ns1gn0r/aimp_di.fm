@@ -13,10 +13,18 @@ type TaskBarIconViewModel() as x =
     let iconSource = x.Factory.Backing(<@ x.IconSource @>, Disabled)
     let currentView = x.Factory.Backing<ViewModelBase>(<@ x.CurrentView @>, new LoginViewModel())
 
-    let eventHandler = function
-        | Events.LoggedIn _ -> currentView.Value <- new NoRadioIsPlayingViewModel()
-        | _ -> ()
+    let loggedIn config =
+        currentView.Value <- new NoRadioIsPlayingViewModel()
+        NotLoggedIn
 
+    let trackStarted = id
+    let trackStopped = id
+
+    let mutable state = State.NotLoggedIn
+
+    let eventHandler e = 
+        let stateTransitions = setupStateMachine loggedIn trackStarted trackStopped
+        state <- stateTransitions state e
     let eventsSubscription = Observable.subscribe eventHandler eventsStream
     
     member x.IconSource

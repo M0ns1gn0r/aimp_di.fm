@@ -20,32 +20,38 @@ type Events =
 | TrackStarted of TrackType
 | TrackStopped
 
-let stateTransitions currentState event =
-    match currentState, event with
-    | NotLoggedIn, LoggedIn config -> 
-        // TODO: check if a track is already playing and decide which state to go.
-        NoRadioIsPlaying config
-    | NotLoggedIn, TrackStarted _
-    | NotLoggedIn, TrackStopped ->
-        NotLoggedIn // Ignoring.
+let setupStateMachine loggedIn trackStarted trackStopped = 
 
-    | NoRadioIsPlaying config, TrackStarted (DiFm trackData) ->
-        // First DI.FM track is started.
-        RadioIsPlaying (config, trackData)
-    | NoRadioIsPlaying config, TrackStarted _
-    | NoRadioIsPlaying config, TrackStopped _ ->
-        NoRadioIsPlaying config  // Ignoring.
-    | NoRadioIsPlaying _, LoggedIn _ ->
-        failwith "Unexpected LoggedIn event on NoRadioIsPlaying state."
+    let stateTransitions currentState event =
+        match currentState, event with
+        | NotLoggedIn, LoggedIn config -> 
+            // TODO: check if a track is already playing and decide which state to go.
+            loggedIn config
+        | NotLoggedIn, TrackStarted _
+        | NotLoggedIn, TrackStopped ->
+            NotLoggedIn // Ignoring.
 
-    | RadioIsPlaying (config, _), TrackStarted (DiFm newTrackData) ->
-        // Another DI.FM track is started.
-        RadioIsPlaying (config, newTrackData)
-    | RadioIsPlaying (config, _), TrackStarted Other
-    | RadioIsPlaying (config, _), TrackStopped ->
-        NoRadioIsPlaying config
-    | RadioIsPlaying _, LoggedIn _ ->
-        failwith "Unexpected LoggedIn event on RadioIsPlaying state."
+        | NoRadioIsPlaying config, TrackStarted (DiFm trackData) ->
+            // First DI.FM track is started.
+            trackStarted()
+            RadioIsPlaying (config, trackData)
+        | NoRadioIsPlaying config, TrackStarted _
+        | NoRadioIsPlaying config, TrackStopped _ ->
+            NoRadioIsPlaying config  // Ignoring.
+        | NoRadioIsPlaying _, LoggedIn _ ->
+            failwith "Unexpected LoggedIn event on NoRadioIsPlaying state."
+
+        | RadioIsPlaying (config, _), TrackStarted (DiFm newTrackData) ->
+            // Another DI.FM track is started.
+            trackStarted()
+            RadioIsPlaying (config, newTrackData)
+        | RadioIsPlaying (config, _), TrackStarted Other
+        | RadioIsPlaying (config, _), TrackStopped ->
+            trackStopped()
+            NoRadioIsPlaying config
+        | RadioIsPlaying _, LoggedIn _ ->
+            failwith "Unexpected LoggedIn event on RadioIsPlaying state."
+    stateTransitions
 
 
 let raiseEvent, eventsStream = 
