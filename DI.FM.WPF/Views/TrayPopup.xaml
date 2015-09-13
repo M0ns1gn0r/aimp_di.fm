@@ -8,8 +8,11 @@
         <DataTemplate DataType="{x:Type VM:LoginViewModel}">
             <V:Login />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type VM:NoTrackPlaysViewModel}">
-            <V:NoTrackPlays />
+        <DataTemplate DataType="{x:Type VM:RadioIsPlayingViewModel}">
+            <V:RadioIsPlaying />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type VM:NoRadioIsPlayingViewModel}">
+            <V:NoRadioIsPlaying />
         </DataTemplate>
     </UserControl.Resources>
 

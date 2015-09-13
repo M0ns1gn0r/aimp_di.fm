@@ -15,7 +15,10 @@ type LoginViewModel() as x =
 
     let doLogin () =
         ()
-        raiseEvent Events.LoggedIn
+        raiseEvent <| Events.LoggedIn {
+                                        apiKey = "";
+                                        stations = Map.ofSeq [("1", 1)];
+                                      }
         
         (*config <-
             match loginToDiFm x.Login x.Password with

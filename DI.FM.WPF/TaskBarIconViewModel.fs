@@ -2,6 +2,7 @@
 
 open FSharp.ViewModule
 open FSharp.ViewModule.Validation
+open DI.FM.State
 
 type Icons = Enabled | Disabled | Error
 
@@ -12,11 +13,12 @@ type TaskBarIconViewModel() as x =
     let iconSource = x.Factory.Backing(<@ x.IconSource @>, Disabled)
     let currentView = x.Factory.Backing<ViewModelBase>(<@ x.CurrentView @>, new LoginViewModel())
 
-    let eventsSubscription =
-        DI.FM.State.eventsStream
-        |> Observable.filter (fun e -> e = DI.FM.State.Events.LoggedIn)
-        |> Observable.subscribe (fun _ -> currentView.Value <- new NoTrackPlaysViewModel())
+    let eventHandler = function
+        | Events.LoggedIn _ -> currentView.Value <- new NoRadioIsPlayingViewModel()
+        | _ -> ()
 
+    let eventsSubscription = Observable.subscribe eventHandler eventsStream
+    
     member x.IconSource
         with get() = match iconSource.Value with
                      | Enabled -> resourcePrefix + "/Icons/enabled.ico"

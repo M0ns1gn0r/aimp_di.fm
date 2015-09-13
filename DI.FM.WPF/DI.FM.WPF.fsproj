@@ -55,10 +55,12 @@
     <Compile Include="Client.fs" />
     <Compile Include="State.fs" />
     <Compile Include="ViewModels\LoginViewModel.fs" />
-    <Compile Include="ViewModels\NoTrackPlaysViewModel.fs" />
+    <Compile Include="ViewModels\NoRadioIsPlayingViewModel.fs" />
+    <Compile Include="ViewModels\RadioIsPlayingViewModel.fs" />
     <Resource Include="Views\TrayPopup.xaml" />
     <Resource Include="Views\Login.xaml" />
-    <Resource Include="Views\NoTrackPlays.xaml" />
+    <Resource Include="Views\NoRadioIsPlaying.xaml" />
+    <None Include="Views\RadioIsPlaying.xaml" />
     <Compile Include="Views\Views.fs" />
     <None Include="packages.config" />
     <Resource Include="TaskBarIcon.xaml" />
