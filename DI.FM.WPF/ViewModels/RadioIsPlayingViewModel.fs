@@ -1,6 +1,8 @@
 ﻿namespace DI.FM.WPF.ViewModels
 
-type RadioIsPlayingViewModel() =
+open DI.FM.State
+
+type RadioIsPlayingViewModel(trackData) =
     inherit FSharp.ViewModule.ViewModelBase()
 
-    member x.Title = "Currently playing track: ..."
+    member x.Title = "Currently playing track: " + trackData

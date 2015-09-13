@@ -14,14 +14,22 @@ type TaskBarIconViewModel() as x =
     let currentView = x.Factory.Backing<ViewModelBase>(<@ x.CurrentView @>, new LoginViewModel())
 
     let loggedIn config =
+        let rnd = System.Random()
+        if false then 
+            currentView.Value <- new NoRadioIsPlayingViewModel()
+            NoRadioIsPlaying config
+        else 
+            let trackData = "Penetralia - Forest"
+            currentView.Value <- new RadioIsPlayingViewModel(trackData)
+            RadioIsPlaying (config, trackData)
+    let trackStarted config trackData =
+        currentView.Value <- new RadioIsPlayingViewModel(trackData)
+        RadioIsPlaying (config, trackData)
+    let trackStopped config =
         currentView.Value <- new NoRadioIsPlayingViewModel()
-        NotLoggedIn
-
-    let trackStarted = id
-    let trackStopped = id
+        NoRadioIsPlaying config
 
     let mutable state = State.NotLoggedIn
-
     let eventHandler e = 
         let stateTransitions = setupStateMachine loggedIn trackStarted trackStopped
         state <- stateTransitions state e

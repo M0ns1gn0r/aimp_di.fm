@@ -4,7 +4,7 @@ open DI.FM.Client
 
 let mutable config : Config option = None
 
-type TrackData = unit
+type TrackData = string
 
 type TrackType =
 | Other
@@ -33,8 +33,7 @@ let setupStateMachine loggedIn trackStarted trackStopped =
 
         | NoRadioIsPlaying config, TrackStarted (DiFm trackData) ->
             // First DI.FM track is started.
-            trackStarted()
-            RadioIsPlaying (config, trackData)
+            trackStarted config trackData
         | NoRadioIsPlaying config, TrackStarted _
         | NoRadioIsPlaying config, TrackStopped _ ->
             NoRadioIsPlaying config  // Ignoring.
@@ -43,12 +42,10 @@ let setupStateMachine loggedIn trackStarted trackStopped =
 
         | RadioIsPlaying (config, _), TrackStarted (DiFm newTrackData) ->
             // Another DI.FM track is started.
-            trackStarted()
-            RadioIsPlaying (config, newTrackData)
+            trackStarted config newTrackData
         | RadioIsPlaying (config, _), TrackStarted Other
         | RadioIsPlaying (config, _), TrackStopped ->
-            trackStopped()
-            NoRadioIsPlaying config
+            trackStopped config
         | RadioIsPlaying _, LoggedIn _ ->
             failwith "Unexpected LoggedIn event on RadioIsPlaying state."
     stateTransitions
