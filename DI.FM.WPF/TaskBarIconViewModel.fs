@@ -13,26 +13,41 @@ type TaskBarIconViewModel() as x =
     let iconSource = x.Factory.Backing(<@ x.IconSource @>, Disabled)
     let currentView = x.Factory.Backing<ViewModelBase>(<@ x.CurrentView @>, new LoginViewModel())
 
-    let loggedIn config =
-        let rnd = System.Random()
-        if false then 
-            currentView.Value <- new NoRadioIsPlayingViewModel()
-            NoRadioIsPlaying config
-        else 
-            let trackData = "Penetralia - Forest"
-            currentView.Value <- new RadioIsPlayingViewModel(trackData)
-            RadioIsPlaying (config, trackData)
-    let trackStarted config trackData =
+    let goToTrackInfoPage config trackData =
         currentView.Value <- new RadioIsPlayingViewModel(trackData)
-        RadioIsPlaying (config, trackData)
-    let trackStopped config =
-        currentView.Value <- new NoRadioIsPlayingViewModel()
-        NoRadioIsPlaying config
 
-    let mutable state = State.NotLoggedIn
-    let eventHandler e = 
-        let stateTransitions = setupStateMachine loggedIn trackStarted trackStopped
-        state <- stateTransitions state e
+    let goToNoTrackPage config =
+        currentView.Value <- new NoRadioIsPlayingViewModel()
+
+    let stateTransitions currentState event =
+        match currentState, event with
+        | (LoggedOut, Playing trackData), HasLoggedIn config -> 
+            goToTrackInfoPage config trackData
+            LoggedIn config, Playing trackData
+        | (LoggedOut, NotPlaying), HasLoggedIn config -> 
+            goToNoTrackPage config
+            LoggedIn config, NotPlaying
+        | (LoggedOut, _), TrackStarted (DiFm trackData) ->
+            // No special actions needed.
+            LoggedOut, Playing trackData
+        | (LoggedOut, _), TrackStarted Other
+        | (LoggedOut, _), TrackStopped ->
+            // No special actions needed.
+            LoggedOut, NotPlaying
+
+        | (LoggedIn _, _), HasLoggedIn _ -> 
+            failwith "Unexpected 'Logged in' event: already logged in."
+        | (LoggedIn config, _), TrackStarted (DiFm trackData) ->
+            goToTrackInfoPage config trackData
+            LoggedIn config, Playing trackData
+        | (LoggedIn config, _), TrackStarted Other
+        | (LoggedIn config, _), TrackStopped ->
+            goToNoTrackPage config
+            LoggedIn config, NotPlaying
+
+
+    let mutable state = LoggedOut, Playing "Penetralia - Forest"
+    let eventHandler e = state <- stateTransitions state e
     let eventsSubscription = Observable.subscribe eventHandler eventsStream
     
     member x.IconSource

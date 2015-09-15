@@ -15,7 +15,7 @@ type LoginViewModel() as x =
 
     let doLogin () =
         ()
-        raiseEvent <| Events.LoggedIn {
+        raiseEvent <| Events.HasLoggedIn {
                                         apiKey = "";
                                         stations = Map.ofSeq [("1", 1)];
                                       }
