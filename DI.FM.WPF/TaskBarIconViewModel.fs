@@ -2,7 +2,7 @@
 
 open FSharp.ViewModule
 open FSharp.ViewModule.Validation
-open DI.FM.State
+open DI.FM.WPF.Logic
 
 type Icons = Enabled | Disabled | Error
 
@@ -46,7 +46,7 @@ type TaskBarIconViewModel() as x =
             LoggedIn config, NotPlaying
 
 
-    let mutable state = LoggedOut, Playing "Penetralia - Forest"
+    let mutable state = LoggedOut, NotPlaying
     let eventHandler e = state <- stateTransitions state e
     let eventsSubscription = Observable.subscribe eventHandler eventsStream
     

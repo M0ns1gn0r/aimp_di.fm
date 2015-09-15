@@ -1,6 +1,6 @@
 ﻿namespace DI.FM.WPF.ViewModels
 
-open DI.FM.State
+open DI.FM.WPF.Logic
 
 type RadioIsPlayingViewModel(trackData) =
     inherit FSharp.ViewModule.ViewModelBase()

@@ -53,7 +53,7 @@
     <Resource Include="Icons\disabled.ico" />
     <Compile Include="Chessie.fs" />
     <Compile Include="Client.fs" />
-    <Compile Include="State.fs" />
+    <Compile Include="Logic.fs" />
     <Compile Include="ViewModels\LoginViewModel.fs" />
     <Compile Include="ViewModels\NoRadioIsPlayingViewModel.fs" />
     <Compile Include="ViewModels\RadioIsPlayingViewModel.fs" />

@@ -80,12 +80,6 @@ let (|DiFmUrl|_|) (url: string) =
         Some (channelName, listeningKey)
     else None
 
-let processDiFmUrl = function
-    | DiFmUrl (channelName, listeningKey) -> 
-        sprintf "DI.FM url detected: %A" (channelName, listeningKey)
-        |>  System.Console.WriteLine
-    | _ -> System.Console.WriteLine "Not a DI.FM url."
-
 /// Attempts to login into DI.FM and retrieve the session cookie.
 let getSessionId login password =
     let cc = System.Net.CookieContainer()

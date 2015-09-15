@@ -5,6 +5,7 @@ open AIMP.SDK360
 open AIMP.SDK.Services.MenuManager
 open AIMP.SDK.UI.MenuItem
 open DI.FM.WPF
+open DI.FM.WPF.Logic
 
 /// Makes the UI culture invariant so that exceptions are not getting localized.
 let initUICulture () =
@@ -31,11 +32,12 @@ type Plugin() =
 
         let trackChangedHandler _ =
             let fi = this.Player.CurrentFileInfo
-            let streamUrl = fi.FileName
-            (fi.Artist, fi.Title, streamUrl)
-            |> sprintf "Track changed: %A"
-            |> System.Diagnostics.Debug.WriteLine
-
+            { 
+                artist = fi.Artist;
+                title = fi.Title;
+                streamUrl = fi.FileName 
+            }
+            |> Logic.raiseTrackChanged 
         this.Player.TrackChanged.Add trackChangedHandler
 
     override this.Dispose() =
