@@ -5,9 +5,11 @@ open Chessie.ErrorHandling.Trial
 open FSharp.Data
 
 type Vote = Up | Down
+type Channel = { Id: int; Name: string }
 type Config = {
-    apiKey: string;
-    stations: Map<string, int>;
+    ApiKey: string;
+    /// A mapping from channelKey to channel data.
+    Channels: Map<string, Channel>;
 }
 type Error = 
 | InvalidCredentials
@@ -16,6 +18,7 @@ type Error =
 | LoginFailed of System.Exception
 | LoadConfigFailed of System.Exception
 | TrackHistoryLookupFailed of System.Exception
+| TrackNotFoundInHistory
 | VoteFailed of System.Exception
 
 
@@ -37,8 +40,9 @@ type DiFmConfig = JsonProvider<"""
         "Config":{
             "channels":[
                 {
-                    "id": 42,
-                    "key": "channelname"
+                    "id": 400,
+                    "key": "chillntropicalhouse",
+                    "name": "Chill & Tropical House"
                 }
             ],
             "member":{
@@ -59,15 +63,18 @@ type DiFmTrackHistory = JsonProvider<"""
             "up":2,
             "down":1
         }
-    },
-    {
-        "artist":null,
-        "title":null,
-        "track_id":null,
-        "type":"advertisement"
     }
 ]
 """>
+// This part was removed from the request above to reduce the number of "option" types.
+//,
+//    {
+//        "artist":null,
+//        "title":null,
+//        "track_id":null,
+//        "type":"advertisement"
+//    }
+
 type DiFmVoteResponse = JsonProvider<""" {"up": 1, "down": 0} """, RootName="VoteResults">
 
 let (|DiFmUrl|_|) (url: string) =
@@ -75,9 +82,9 @@ let (|DiFmUrl|_|) (url: string) =
     let m = Regex.Match(url, pattern)
     if m.Success
     then
-        let channelName = m.Groups.[1].Value
+        let channelKey = m.Groups.[1].Value
         let listeningKey = m.Groups.[2].Value
-        Some (channelName, listeningKey)
+        Some (channelKey, listeningKey)
     else None
 
 /// Attempts to login into DI.FM and retrieve the session cookie.
@@ -110,7 +117,6 @@ let getSessionId login password =
         |> DiFmLoginResponse.Parse
         |> validate
     with ex -> LoginFailed ex |> fail
-    
 
 /// Retrieves the apiKey and builds "channel name" to "channel id" map.
 let getDiFmConfig sessionId =
@@ -124,9 +130,9 @@ let getDiFmConfig sessionId =
         let config = response.Api.Config
         ok
             {
-                apiKey = config.Member.ApiKey;
-                stations = config.Channels
-                            |> Seq.map (fun c -> (c.Key, c.Id))
+                ApiKey = config.Member.ApiKey;
+                Channels = config.Channels
+                            |> Seq.map (fun c -> (c.Key, { Id = c.Id; Name = c.Name }))
                             |> Map.ofSeq
             }
     with ex -> LoadConfigFailed ex |> fail
@@ -137,13 +143,16 @@ let loginToDiFm login password = getSessionId login password >>= getDiFmConfig
 /// Retrieves track history of the specified channel and tries to find the requested track there.
 let findTrackInHistory channelId artist title =
     try
-        diFmTrackHistoryUrl channelId 
-        |> DiFmTrackHistory.Load
-        |> Seq.tryFind (fun t -> 
-            t.Type = "track" 
-            && t.Artist = Some(artist)
-            && t.Title = Some(title))
-        |> ok
+        let result = 
+            diFmTrackHistoryUrl channelId 
+            |> DiFmTrackHistory.Load
+            |> Seq.tryFind (fun t -> 
+                t.Type = "track" 
+                && t.Artist = artist
+                && t.Title = title)
+        match result with 
+        | Some data -> ok data 
+        | None -> fail TrackNotFoundInHistory
     with ex -> TrackHistoryLookupFailed ex |> fail
 
 /// Votes for or against the specified track.

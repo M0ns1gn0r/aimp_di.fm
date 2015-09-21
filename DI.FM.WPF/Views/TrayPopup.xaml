@@ -21,8 +21,8 @@
           BorderBrush="Black"
           BorderThickness="1"
           CornerRadius="4"
-          Width="400"
-          Height="150">
+          Width="600"
+          Height="290">
         <ContentControl Content="{Binding CurrentView}" />
     </Border>
         
