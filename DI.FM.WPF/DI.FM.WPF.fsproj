@@ -57,6 +57,7 @@
     <Resource Include="Icons\like.png" />
     <Resource Include="Icons\like_active.png" />
     <Resource Include="Icons\logo-difm.png" />
+    <Resource Include="Icons\login.png" />
     <Resource Include="Icons\logout.png" />
     <Compile Include="Chessie.fs" />
     <Compile Include="Client.fs" />

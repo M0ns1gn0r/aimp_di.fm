@@ -1,5 +1,10 @@
 ﻿<UserControl
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <TextBlock Margin="3" Grid.Row="0" Grid.Column="0" Text="{Binding Title}" />
+    <Label 
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        FontSize="20">
+        No DI.FM tracks are playing at the moment
+    </Label>
 </UserControl>

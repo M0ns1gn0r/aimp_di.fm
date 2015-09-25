@@ -8,14 +8,11 @@ type FullTrackData = {
     Title: string
     Likes: int
     Dislikes: int
-//    iLike: bool
-//    iDislike: bool
 }
 
-type RadioIsPlayingViewModel(loggedInAs: string, track: FullTrackData) =
+type RadioIsPlayingViewModel(track: FullTrackData) =
     inherit FSharp.ViewModule.ViewModelBase()
 
-    member x.LoggedInAs = loggedInAs
     member x.ChannelName = track.ChannelName.ToUpper()
     member x.Artist = track.Artist
     member x.Title = track.Title
