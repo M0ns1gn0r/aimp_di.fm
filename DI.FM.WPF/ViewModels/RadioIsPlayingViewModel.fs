@@ -12,10 +12,11 @@ type FullTrackData = {
 //    iDislike: bool
 }
 
-type RadioIsPlayingViewModel(track: FullTrackData) =
+type RadioIsPlayingViewModel(loggedInAs: string, track: FullTrackData) =
     inherit FSharp.ViewModule.ViewModelBase()
 
-    member x.ChannelName = track.ChannelName
+    member x.LoggedInAs = loggedInAs
+    member x.ChannelName = track.ChannelName.ToUpper()
     member x.Artist = track.Artist
     member x.Title = track.Title
     member x.Likes = track.Likes

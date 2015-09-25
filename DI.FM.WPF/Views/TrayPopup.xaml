@@ -22,7 +22,7 @@
           BorderThickness="1"
           CornerRadius="4"
           Width="600"
-          Height="290">
+          Height="258">
         <ContentControl Content="{Binding CurrentView}" />
     </Border>
         

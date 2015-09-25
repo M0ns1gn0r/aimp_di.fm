@@ -30,11 +30,11 @@
             </Button>
             <TextBlock DockPanel.Dock="Right"
                        FontSize="14"
-                       VerticalAlignment="Center">
-                rfever@gmail.com
-            </TextBlock>
+                       VerticalAlignment="Center"
+                       Margin="0,0,0,2"
+                       Text="{Binding LoggedInAs}" />
             <Label>
-                <!--Placeholder-->
+                <!--Placeholder for expander-->
             </Label>
         </DockPanel>
         <DockPanel  Background="#191D2A">

@@ -7,9 +7,10 @@ open FSharp.Data
 type Vote = Up | Down
 type Channel = { Id: int; Name: string }
 type Config = {
-    ApiKey: string;
+    LoggedInAs: string
+    ApiKey: string
     /// A mapping from channelKey to channel data.
-    Channels: Map<string, Channel>;
+    Channels: Map<string, Channel>
 }
 type Error = 
 | InvalidCredentials
@@ -55,8 +56,9 @@ type DiFmTrackHistory = JsonProvider<"""
 [
     {
         "art_url":"\/\/static.audioaddict.com\/4\/a\/e\/e\/3\/8\/4aee38295c4cc174b016c4982a226298.jpg",
-        "artist":"Digital Department",
-        "title":"My Favourite Time (Platunoff Breaks Remix)",
+        "artist": "Tears Of Technology",
+        "title": "My Curse (Original Mix)",
+        "track": "Tears of Technology - My Curse (Original Mix)",
         "track_id":913147,
         "type":"track",
         "votes":{
@@ -119,7 +121,7 @@ let getSessionId login password =
     with ex -> LoginFailed ex |> fail
 
 /// Retrieves the apiKey and builds "channel name" to "channel id" map.
-let getDiFmConfig sessionId =
+let getDiFmConfig login sessionId =
     try
         let response = 
             Http.RequestString(
@@ -130,6 +132,7 @@ let getDiFmConfig sessionId =
         let config = response.Api.Config
         ok
             {
+                LoggedInAs = login
                 ApiKey = config.Member.ApiKey;
                 Channels = config.Channels
                             |> Seq.map (fun c -> (c.Key, { Id = c.Id; Name = c.Name }))
@@ -138,18 +141,17 @@ let getDiFmConfig sessionId =
     with ex -> LoadConfigFailed ex |> fail
 
 /// Attempts to login into DI.FM and load the stations configuration.
-let loginToDiFm login password = getSessionId login password >>= getDiFmConfig
+let loginToDiFm login password = getSessionId login password >>= (getDiFmConfig login)
 
 /// Retrieves track history of the specified channel and tries to find the requested track there.
-let findTrackInHistory channelId artist title =
+let findTrackInHistory channelId track =
     try
-        let result = 
+        let history = 
             diFmTrackHistoryUrl channelId 
             |> DiFmTrackHistory.Load
-            |> Seq.tryFind (fun t -> 
-                t.Type = "track" 
-                && t.Artist = artist
-                && t.Title = title)
+        let result = 
+            history
+            |> Seq.tryFind (fun t -> t.Type = "track" && t.Track = track)
         match result with 
         | Some data -> ok data 
         | None -> fail TrackNotFoundInHistory
