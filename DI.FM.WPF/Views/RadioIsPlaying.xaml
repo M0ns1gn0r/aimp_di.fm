@@ -17,7 +17,7 @@
             <TextBlock FontSize="22" Foreground="#9ba5c5" Padding="0" 
                         TextWrapping="Wrap" Margin="0,0,0,5" Text="{Binding Title}"></TextBlock>
             <StackPanel Orientation="Horizontal" Margin="0,15,0,0" >
-                <Button Margin="0,0,10,0">
+                <Button Margin="0,0,10,0" Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <StackPanel Orientation="Horizontal" Height="30" SnapsToDevicePixels="True">
@@ -61,7 +61,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button>
+                <Button Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <StackPanel Orientation="Horizontal" Height="30" SnapsToDevicePixels="True">

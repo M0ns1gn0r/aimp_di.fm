@@ -41,7 +41,7 @@ type TaskBarIconViewModel() as x =
             }
             currentView.Value <- new RadioIsPlayingViewModel(fullTrackData)
             iconSource.Value <- Enabled
-        | Fail (TrackNotFoundInHistory::[]) ->
+        | Fail [TrackNotFoundInHistory] ->
             // TODO: what to do if TrackNotInHistory?
             System.Diagnostics.Debug.WriteLine ("Track not in history: " + track)
         | Fail _ ->
@@ -54,12 +54,12 @@ type TaskBarIconViewModel() as x =
 
     let stateTransitions currentState event =
         match currentState, event with
-        | (LoggedOut, Playing trackData), HasLoggedIn config ->         
+        | (LoggedOut, Playing trackData), HasLoggedIn config ->
             loginFormVisibility.Value <- Visibility.Collapsed
             logoutFormVisibility.Value <- Visibility.Visible
             goToTrackInfoPage config trackData
             LoggedIn config, Playing trackData
-        | (LoggedOut, NotPlaying), HasLoggedIn config ->        
+        | (LoggedOut, NotPlaying), HasLoggedIn config ->
             loginFormVisibility.Value <- Visibility.Collapsed
             logoutFormVisibility.Value <- Visibility.Visible
             goToNoTrackPage config
@@ -72,7 +72,7 @@ type TaskBarIconViewModel() as x =
             iconSource.Value <- Disabled
             LoggedOut, NotPlaying
 
-        | (LoggedIn _, _), HasLoggedIn _ -> 
+        | (LoggedIn _, _), HasLoggedIn _ ->
             failwith "Unexpected 'Logged in' event: already logged in."
         | (LoggedIn config, _), TrackStarted (DiFm trackData) ->
             goToTrackInfoPage config trackData
