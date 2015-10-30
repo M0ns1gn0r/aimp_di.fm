@@ -33,9 +33,9 @@ type Plugin() =
         let trackChangedHandler _ =
             let fi = this.Player.CurrentFileInfo
             { 
-                artist = fi.Artist;
-                title = fi.Title;
-                streamUrl = fi.FileName 
+                Artist = fi.Artist;
+                Title = fi.Title;
+                StreamUrl = fi.FileName 
             }
             |> Logic.raiseTrackChanged 
         this.Player.TrackChanged.Add trackChangedHandler

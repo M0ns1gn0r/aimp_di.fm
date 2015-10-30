@@ -23,10 +23,10 @@ type TaskBarIconViewModel() as x =
     let login = x.Factory.Backing(<@ x.Login @>, "rfever@gmail.com", notNullOrWhitespace)
 
     let goToTrackInfoPage (config: Config) (trackData: TrackData) =
-        let track = trackData.artist + " - " + trackData.title
+        let track = trackData.Artist + " - " + trackData.Title
 
         // TODO: add exception handling: the station might not exist.
-        let channel = config.Channels.[trackData.channelKey]
+        let channel = config.Channels.[trackData.ChannelKey]
 
         let trackResult = findTrackInHistory channel.Id track
         match trackResult with

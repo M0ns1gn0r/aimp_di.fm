@@ -5,9 +5,9 @@ open DI.FM.Client
 let mutable config : Config option = None
 
 type TrackData = {
-    channelKey: string
-    artist: string
-    title: string
+    ChannelKey: string
+    Artist: string
+    Title: string
 }
 
 type TrackType =
@@ -33,15 +33,15 @@ let raiseEvent, eventsStream =
     let event = Event<Events>()
     event.Trigger, event.Publish
 
-type RawTrackData = { artist: string; title: string; streamUrl: string }
+type RawTrackData = { Artist: string; Title: string; StreamUrl: string }
 let raiseTrackChanged rawTrackData =
     let event = 
-        match rawTrackData.streamUrl with
-         | DiFmUrl (channelKey, listeningKey) ->             
+        match rawTrackData.StreamUrl with
+         | DiFmUrl (channelKey, listeningKey) ->
             let trackData = { 
-                channelKey = channelKey
-                artist = rawTrackData.artist
-                title = rawTrackData.title
+                ChannelKey = channelKey
+                Artist = rawTrackData.Artist
+                Title = rawTrackData.Title
             }
             TrackStarted (DiFm trackData)
          | _ -> TrackStarted Other
