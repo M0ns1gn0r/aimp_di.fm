@@ -32,14 +32,15 @@ type TaskBarIconViewModel() as x =
         match trackResult with
         | Pass track | Warn (track, _) ->
             let fullTrackData = {
+                ChannelId = channel.Id
                 ChannelName = channel.Name
+                TrackId = track.TrackId
                 Artist = track.Artist
                 Title = track.Title
                 Likes = track.Votes.Up
                 Dislikes = track.Votes.Down
-
             }
-            currentView.Value <- new RadioIsPlayingViewModel(fullTrackData)
+            currentView.Value <- new RadioIsPlayingViewModel(config.ApiKey, fullTrackData)
             iconSource.Value <- Enabled
         | Fail [TrackNotFoundInHistory] ->
             // TODO: what to do if TrackNotInHistory?
