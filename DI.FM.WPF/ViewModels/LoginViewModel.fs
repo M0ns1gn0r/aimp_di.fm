@@ -5,5 +5,5 @@ open DI.FM.WPF.Logic
 open Chessie.ErrorHandling.Trial
 open FSharp.ViewModule.Validation
 
-type LoginViewModel() as x =
+type LoginViewModel() =
     inherit FSharp.ViewModule.ViewModelBase()

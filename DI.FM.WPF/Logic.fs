@@ -2,8 +2,6 @@
 
 open DI.FM.Client
 
-let mutable config : Config option = None
-
 type TrackData = {
     ChannelKey: string
     Artist: string
