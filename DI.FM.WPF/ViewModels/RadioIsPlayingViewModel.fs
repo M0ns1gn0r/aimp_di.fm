@@ -16,6 +16,11 @@ type FullTrackData = {
 type RadioIsPlayingViewModel (apiKey: string, track: FullTrackData) as x =
     inherit FSharp.ViewModule.ViewModelBase()
 
+    let boolToInt value = if value then 1 else 0
+
+    let likes = x.Factory.Backing(<@ x.Likes @>, track.Likes)
+    let dislikes = x.Factory.Backing(<@ x.Dislikes @>, track.Dislikes)
+
     let hasVotedUp = x.Factory.Backing(<@ x.HasVotedUp @>, false)
     let hasVotedDown = x.Factory.Backing(<@ x.HasVotedDown @>, false)
 
@@ -23,8 +28,12 @@ type RadioIsPlayingViewModel (apiKey: string, track: FullTrackData) as x =
         match Client.vote apiKey track.ChannelId track.TrackId direction with
         | Pass _ | Warn _ -> 
             match direction with
-                | Client.Vote.Up -> x.HasVotedUp <- true
-                | Client.Vote.Down -> x.HasVotedDown <- true
+                | Client.Vote.Up -> 
+                    x.HasVotedUp <- true
+                    x.HasVotedDown <- false
+                | Client.Vote.Down -> 
+                    x.HasVotedUp <- false
+                    x.HasVotedDown <- true
         | Fail _ -> 
             // TODO: go to error view instead?
             failwith "vote failed"
@@ -32,13 +41,19 @@ type RadioIsPlayingViewModel (apiKey: string, track: FullTrackData) as x =
     member x.ChannelName = track.ChannelName.ToUpper()
     member x.Artist = track.Artist
     member x.Title = track.Title
-    member x.Likes = track.Likes
-    member x.Dislikes = track.Dislikes
+    member x.Likes with get() = likes.Value
+    member x.Dislikes with get() = dislikes.Value
 
     member x.HasVotedUp 
-        with get() = hasVotedUp.Value and set(value: bool) = hasVotedUp.Value <- value
+        with get() = hasVotedUp.Value 
+        and set(value: bool) = 
+            hasVotedUp.Value <- value
+            likes.Value <- track.Likes + boolToInt value
     member x.HasVotedDown 
-        with get() = hasVotedDown.Value and set(value: bool) = hasVotedDown.Value <- value
+        with get() = hasVotedDown.Value
+        and set(value: bool) = 
+            hasVotedDown.Value <- value
+            dislikes.Value <- track.Dislikes + boolToInt value
 
     member x.VoteUpCommand = 
         // TODO: use an asynchronous version.

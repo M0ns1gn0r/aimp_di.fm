@@ -32,12 +32,21 @@
                                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                                         </Grid.ColumnDefinitions>
 
-                                        <Image Grid.Column="0"
-                                            Source="pack://application:,,,/DI.FM.WPF;component/Icons/like.png"
-                                            Width="20"
-                                            Height="20">
+                                        <Image Grid.Column="0" Width="20" Height="20">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasVotedUp}" Value="False">
+                                                            <Setter Property="Source" Value="pack://application:,,,/DI.FM.WPF;component/Icons/like.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding HasVotedUp}" Value="True">
+                                                            <Setter Property="Source" Value="pack://application:,,,/DI.FM.WPF;component/Icons/like_active.png"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
                                         </Image>
-                                        <Label Grid.Column="1" Margin="0,0,1,0" Padding="3,5,5,5">Like</Label>
+                                        <Label x:Name="Text" Grid.Column="1" Margin="0,0,1,0" Padding="3,5,5,5">Like</Label>
                                         <Canvas Grid.Column="2" Width="5">
                                             <Polygon Points="0 15, 10 5, 10 25"
                                                     Fill="#3070CF">
@@ -45,17 +54,20 @@
                                         </Canvas>
                                     </Grid>
                                 </Border>
-                                <Border x:Name="ButtonBorderRight"
+                                <Border x:Name="RightBorder"
                                     CornerRadius="0,3,3,0"
                                     BorderThickness="0"
                                     Background="#3070CF">
-                                    <Label Padding="9,5" Content="{Binding Likes}"></Label>
+                                    <Label x:Name="Votes" Padding="9,5" Content="{Binding Likes}"></Label>
                                 </Border>
                             </StackPanel>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#598CD9"
-                                    TargetName="ButtonBorderLeft" />
+                                    <Setter Property="Background" Value="#598CD9" TargetName="ButtonBorderLeft" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground"  Value="White" TargetName="Text"/>
+                                    <Setter Property="Foreground"  Value="White" TargetName="Votes"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -76,12 +88,23 @@
                                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                                         </Grid.ColumnDefinitions>
 
-                                        <Image Grid.Column="0"
-                                            Source="pack://application:,,,/DI.FM.WPF;component/Icons/dislike.png"
-                                            Width="20"
-                                            Height="20">
+                                        <Image Grid.Column="0" Width="20" Height="20">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasVotedDown}" Value="False">
+                                                            <Setter Property="Source" 
+                                                                    Value="pack://application:,,,/DI.FM.WPF;component/Icons/dislike.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding HasVotedDown}" Value="True">
+                                                            <Setter Property="Source"
+                                                                    Value="pack://application:,,,/DI.FM.WPF;component/Icons/dislike_active.png"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
                                         </Image>
-                                        <Label Grid.Column="1" Margin="0,0,1,0" Padding="3,5,5,5">Dislike</Label>
+                                        <Label x:Name="Text" Grid.Column="1" Margin="0,0,1,0" Padding="3,5,5,5">Dislike</Label>
                                         <Canvas Grid.Column="2" Width="5">
                                             <Polygon
                                                 Points="0 15, 10 5, 10 25"
@@ -90,17 +113,20 @@
                                         </Canvas>
                                     </Grid>
                                 </Border>
-                                <Border x:Name="ButtonBorderRight"
+                                <Border x:Name="RightBorder"
                                     CornerRadius="0,3,3,0"
                                     BorderThickness="0"
                                     Background="#3070CF">
-                                    <Label Padding="9,5" Content="{Binding Dislikes}"></Label>
+                                    <Label x:Name="Votes" Padding="9,5" Content="{Binding Dislikes}"></Label>
                                 </Border>
                             </StackPanel>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#598CD9"
-                                    TargetName="ButtonBorderLeft" />
+                                    <Setter Property="Background" Value="#598CD9" TargetName="RightBorder" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground"  Value="White" TargetName="Text"/>
+                                    <Setter Property="Foreground"  Value="White" TargetName="Votes"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
