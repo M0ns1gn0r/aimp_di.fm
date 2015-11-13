@@ -32,7 +32,7 @@
           BorderBrush="Black"
           BorderThickness="1"
           CornerRadius="4"
-          Width="600"
+          Width="500"
           Height="258">
         <DockPanel LastChildFill="True" Background="#191D2A">
             <DockPanel 

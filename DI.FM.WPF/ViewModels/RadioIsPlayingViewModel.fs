@@ -6,6 +6,7 @@ open Chessie.ErrorHandling.Trial
 type FullTrackData = {
     ChannelId: int
     ChannelName: string
+    AlbumArtUrl: string option
     TrackId: int
     Artist: string
     Title: string
@@ -41,6 +42,10 @@ type RadioIsPlayingViewModel (apiKey: string, track: FullTrackData) as x =
             failwith "vote failed"
 
     member x.ChannelName = track.ChannelName.ToUpper()
+    member x.AlbumArtUrl = 
+        match track.AlbumArtUrl with 
+        | None -> "pack://application:,,,/DI.FM.WPF;component/Icons/channel.png"
+        | Some artUrl -> artUrl
     member x.Artist = track.Artist
     member x.Title = track.Title
     member x.Likes with get() = likes.Value

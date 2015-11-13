@@ -34,6 +34,10 @@ type TaskBarIconViewModel() as x =
             let fullTrackData = {
                 ChannelId = channel.Id
                 ChannelName = channel.Name
+                AlbumArtUrl = 
+                    match track.ArtUrl with
+                    | null | "" -> None
+                    | artUrl -> Some ("http:" + artUrl)
                 TrackId = track.TrackId
                 Artist = track.Artist
                 Title = track.Title

@@ -3,9 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <DockPanel>
-        <Image Source="pack://application:,,,/DI.FM.WPF;component/Icons/channel.png"
+        <Image Source="{Binding AlbumArtUrl}"
                 Width="200" Height="200" Margin="10"
                 VerticalAlignment="Top" />
+        
 
         <StackPanel Margin="5,10,10,10">
             <TextBlock FontSize="12">
@@ -21,7 +22,7 @@
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <StackPanel Orientation="Horizontal" Height="30" SnapsToDevicePixels="True">
-                                <Border x:Name="ButtonBorderLeft"
+                                <Border x:Name="LeftBorder"
                                     CornerRadius="3,0,0,3"
                                     BorderThickness="0"
                                     Background="#447ed4">
@@ -63,7 +64,7 @@
                             </StackPanel>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#598CD9" TargetName="ButtonBorderLeft" />
+                                    <Setter Property="Background" Value="#598CD9" TargetName="LeftBorder" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter Property="Foreground"  Value="White" TargetName="Text"/>
@@ -77,7 +78,7 @@
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <StackPanel Orientation="Horizontal" Height="30" SnapsToDevicePixels="True">
-                                <Border x:Name="ButtonBorderLeft"
+                                <Border x:Name="LeftBorder"
                                     CornerRadius="3,0,0,3"
                                     BorderThickness="0"
                                     Background="#447ed4">
@@ -122,7 +123,7 @@
                             </StackPanel>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#598CD9" TargetName="RightBorder" />
+                                    <Setter Property="Background" Value="#598CD9" TargetName="LeftBorder" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter Property="Foreground"  Value="White" TargetName="Text"/>
