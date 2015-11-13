@@ -26,14 +26,16 @@ type RadioIsPlayingViewModel (apiKey: string, track: FullTrackData) as x =
 
     let castVote direction () = 
         match Client.vote apiKey track.ChannelId track.TrackId direction with
-        | Pass _ | Warn _ -> 
+        | Pass r | Warn (r, _) -> 
+            likes.Value <- r.Up
+            dislikes.Value <- r.Down
             match direction with
                 | Client.Vote.Up -> 
-                    x.HasVotedUp <- true
-                    x.HasVotedDown <- false
+                    hasVotedUp.Value <- true
+                    hasVotedDown.Value <- false
                 | Client.Vote.Down -> 
-                    x.HasVotedUp <- false
-                    x.HasVotedDown <- true
+                    hasVotedUp.Value <- false
+                    hasVotedDown.Value <- true
         | Fail _ -> 
             // TODO: go to error view instead?
             failwith "vote failed"
@@ -44,16 +46,12 @@ type RadioIsPlayingViewModel (apiKey: string, track: FullTrackData) as x =
     member x.Likes with get() = likes.Value
     member x.Dislikes with get() = dislikes.Value
 
-    member x.HasVotedUp 
+    member x.HasVotedUp
         with get() = hasVotedUp.Value 
-        and set(value: bool) = 
-            hasVotedUp.Value <- value
-            likes.Value <- track.Likes + boolToInt value
-    member x.HasVotedDown 
+        and set(value: bool) = hasVotedUp.Value <- value
+    member x.HasVotedDown
         with get() = hasVotedDown.Value
-        and set(value: bool) = 
-            hasVotedDown.Value <- value
-            dislikes.Value <- track.Dislikes + boolToInt value
+        and set(value: bool) = hasVotedDown.Value <- value
 
     member x.VoteUpCommand = 
         // TODO: use an asynchronous version.
