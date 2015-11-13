@@ -1,7 +1,6 @@
 ﻿module DI.FM
 
 open AIMP.SDK
-open AIMP.SDK360
 open AIMP.SDK.Services.MenuManager
 open AIMP.SDK.UI.MenuItem
 open DI.FM.WPF
