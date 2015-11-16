@@ -4,9 +4,9 @@
     
     <DockPanel>
         <Image Source="{Binding AlbumArtUrl}"
-                Width="200" Height="200" Margin="10"
-                VerticalAlignment="Top" />
-        
+               Stretch="UniformToFill" VerticalAlignment="Center"
+               RenderOptions.BitmapScalingMode="Fant"
+               Width="200" Height="200" Margin="10" />
 
         <StackPanel Margin="5,10,10,10">
             <TextBlock FontSize="12">
