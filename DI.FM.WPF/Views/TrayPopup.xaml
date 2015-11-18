@@ -5,6 +5,8 @@
     xmlns:VM="clr-namespace:DI.FM.WPF.ViewModels;assembly=DI.FM.WPF">
 
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        
         <DataTemplate DataType="{x:Type VM:LoginViewModel}">
             <V:Login />
         </DataTemplate>
@@ -35,49 +37,14 @@
           Width="500"
           Height="258">
         <DockPanel LastChildFill="True" Background="#191D2A">
-            <DockPanel 
-                Visibility="{Binding LoginFormVisibility}"
-                DockPanel.Dock="Top" Background="#3165AE" LastChildFill="True">
+            <DockPanel DockPanel.Dock="Top" Background="#3165AE" LastChildFill="True">
                 <Image Source="pack://application:,,,/DI.FM.WPF;component/Icons/logo-difm.png"
                    Width="233"
                    Margin="5" 
                    DockPanel.Dock="Left"/>
-                <Button DockPanel.Dock="Right" Margin="3,0,5,0" Cursor="Hand"
-                        Command="{Binding LoginCommand}"
-                        CommandParameter="{Binding ElementName=txtPassword}">
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Image
-                                Source="pack://application:,,,/DI.FM.WPF;component/Icons/login.png"
-                                Height="20"/>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <PasswordBox DockPanel.Dock="Right"
-                         Name="txtPassword"
-                         Width="120" Height="25"
-                         FontSize="14"
-                         VerticalAlignment="Center"
-                         Margin="0,0,0,2">
-                </PasswordBox>
-                <TextBox DockPanel.Dock="Right"
-                     Width="120"
-                     FontSize="14"
-                     VerticalAlignment="Center"
-                     Margin="0,0,5,2" Height="25"
-                     Text="{Binding Login}" />
-                <Label>
-                    <!--Placeholder for expander-->
-                </Label>
-            </DockPanel>
-            <DockPanel 
-                Visibility="{Binding LogoutFormVisibility}"
-                DockPanel.Dock="Top" Background="#3165AE" LastChildFill="True">
-                <Image Source="pack://application:,,,/DI.FM.WPF;component/Icons/logo-difm.png"
-                   Width="233"
-                   Margin="5" 
-                   DockPanel.Dock="Left"/>
-                <!--<Button DockPanel.Dock="Right" Margin="3,0,5,0" >
+            <!--<Button DockPanel.Dock="Right" 
+                        Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Margin="3,0,5,0" >
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Image 
@@ -87,15 +54,15 @@
                     </Button.Template>
                 </Button>-->
                 <TextBlock DockPanel.Dock="Right"
-                       FontSize="14"
-                       VerticalAlignment="Center"
-                       Margin="0,0,10,2"
-                       Text="{Binding Login}" />
+                           Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Margin="0,0,10,2"
+                           Text="{Binding LoggedInAs}" />
                 <Label>
                     <!--Placeholder for expander-->
                 </Label>
             </DockPanel>
-            
             <ContentControl Content="{Binding CurrentView}" />
         </DockPanel>
     </Border>

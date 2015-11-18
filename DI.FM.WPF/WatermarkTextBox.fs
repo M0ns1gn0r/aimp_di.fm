@@ -70,7 +70,6 @@ type WaterMarkTextHelper() =
     static member SetWatermarkText (obj: DependencyObject, value: string) =
         obj.SetValue(WatermarkTextProperty, value)
 
-
     static member GetTextLength (obj: DependencyObject) =
         obj.GetValue(TextLengthProperty) :?> int
     static member SetTextLength (obj: DependencyObject, value: int) =
