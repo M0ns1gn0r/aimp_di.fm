@@ -62,6 +62,7 @@
     <Compile Include="Chessie.fs" />
     <Compile Include="Client.fs" />
     <Compile Include="Logic.fs" />
+    <Compile Include="WatermarkTextBox.fs" />
     <Compile Include="ViewModels\LoginViewModel.fs" />
     <Compile Include="ViewModels\NoRadioIsPlayingViewModel.fs" />
     <Compile Include="ViewModels\RadioIsPlayingViewModel.fs" />
