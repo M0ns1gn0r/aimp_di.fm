@@ -2,6 +2,7 @@
 
 open AIMP.SDK
 open AIMP.SDK.Services.MenuManager
+open AIMP.SDK.Services.Player
 open AIMP.SDK.UI.MenuItem
 open DI.FM.WPF
 open DI.FM.WPF.Logic
@@ -9,11 +10,11 @@ open System.IO
 open Newtonsoft.Json
 
 /// Makes the UI culture invariant so that exceptions are not getting localized.
-let initUICulture () =
+let private initUICulture () =
     System.Threading.Thread.CurrentThread.CurrentUICulture <-
         System.Globalization.CultureInfo.InvariantCulture
 
-let loadConfig profilePath =
+let private loadConfig profilePath =
     let configPath = Path.Combine(profilePath, "DI.FM", "config.json")
     
     // Read the config and raise HasLoggedIn event.
@@ -37,7 +38,7 @@ let loadConfig profilePath =
     Observable.subscribe writeConfigToFileHandler Logic.eventsStream
 
 [<AimpPlugin("DI.FM", "Roman Nikitin", "1")>]
-type Plugin() = 
+type Plugin() as this = 
     inherit AimpPlugin()
      
     let menuType = ParentMenuType.AIMP_MENUID_PLAYER_TRAY
@@ -45,23 +46,17 @@ type Plugin() =
     let menuItemMinus = new StandartMenuItem("DI.FM vote down");
 
     let mutable configChangeSubscription: System.IDisposable = null;
+    let mutable trackChangedSubscription: System.IDisposable = null;
+    let mutable stateChangedHandler: AimpStateChanged = null;
 
-    override this.HasSettingDialog = false
-    override this.ShowSettingDialog(wnd) = ()
+    let subscribeToStateChanged (player: IAimpPlayer) =
+        stateChangedHandler <- new AimpStateChanged(
+            function 
+            | AimpPlayerState.Stopped -> Logic.raiseEvent TrackStopped
+            | _ -> ())
+        player.add_StateChanged stateChangedHandler
 
-    override this.Initialize() =
-        initUICulture()
-        Interop.resetFPU ()
-        UI.start()
-
-        // TODO: register hotkeys.
-
-        // Form config file path and request its loading.
-        let profilePath =
-            this.Player.Core.GetPath(AimpMessages.AimpCorePathType.AIMP_CORE_PATH_PROFILE)
-        configChangeSubscription <- loadConfig profilePath
-
-        // Transform AIMP's track changed events into internal events.
+    let subscribeToTrackChanged (player: IAimpPlayer) =
         let trackChangedHandler _ =
             let fi = this.Player.CurrentFileInfo
             { 
@@ -70,12 +65,35 @@ type Plugin() =
                 StreamUrl = fi.FileName 
             }
             |> Logic.raiseTrackChanged 
-        this.Player.TrackChanged.Add trackChangedHandler
+        trackChangedSubscription <- player.TrackChanged.Subscribe trackChangedHandler
+
+    override this.HasSettingDialog = false
+    override this.ShowSettingDialog(wnd) = ()
+
+    override this.Initialize() =
+        let player = this.Player
+
+        initUICulture()
+        Interop.resetFPU ()
+        UI.start()
+
+        // TODO: register hotkeys.
+
+        // Form config file path and request its loading.
+        let profilePath = player.Core.GetPath(AimpMessages.AimpCorePathType.AIMP_CORE_PATH_PROFILE)
+        configChangeSubscription <- loadConfig profilePath
+
+        // Transform AIMP's events into internal events.
+        subscribeToStateChanged player
+        subscribeToTrackChanged player
 
     override this.Dispose() =
         UI.stop()
 
-        if (configChangeSubscription <> null) then configChangeSubscription.Dispose()
+        let isNotNull = function null -> false | _ -> true
+        if isNotNull configChangeSubscription then configChangeSubscription.Dispose()
+        if isNotNull trackChangedSubscription then trackChangedSubscription.Dispose()
+        if isNotNull stateChangedHandler then this.Player.remove_StateChanged stateChangedHandler
 
         this.Player.MenuManager.Delete(menuItemMinus)
         this.Player.MenuManager.Delete(menuItemPlus)
